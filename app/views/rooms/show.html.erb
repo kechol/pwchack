@@ -1,12 +1,63 @@
-<h1>Chat room</h1>
-
-<div id="messages">
-  <%- @messages.each do |message| %>
-    <div class="message"><%= message.content %></div>
-  <% end %>
+<div class="app">
+  <div class="header">
+    <div class="title">PwC Hack</div>
+  </div>
+  <div class="navigation">
+    <div class="map">
+      <div id="google_map"></div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="chatbox open">
+    <div class="chatbox-handle">
+      <i class="fa fa-chevron-up" aria-hidden="true"></i>
+    </div>
+    <div class="chatbox-stream">
+      <div id="messages">
+        <div class="message bot">
+          <div class="message-body text">Where do you want to go?</div>
+        </div>
+        <div class="message me">
+          <div class="message-body text">Where do you want to go?</div>
+        </div>
+      </div>
+    </div>
+    <div class="chatbox-input">
+      <form action="" id="chat_input">
+        <label for="chat_new_image" class="chatbox-input-file">
+          <i class="fa fa-camera"></i>
+          <input type="file" name="chat_new_image" id="chat_new_image">
+        </label>
+        <div class="chatbox-input-text">
+          <input type="text" name="chat_new_message" id="chat_new_message">
+          <button type="submit" id="chat_input_submit">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
+<script>
+$(document).on('click', '.chatbox-handle', function(e) {
+  $('.chatbox').toggleClass('open');
+});
 
-<form>
-  <label>Say something:</label><br>
-  <input type="text" data-behavior="message_input">
-</form>
+function init() {
+  navigator.geolocation.getCurrentPosition(geoSuccess, geoError);
+
+  function geoSuccess(pos) {
+    var lat = pos.coords.latitude;
+    var lng = pos.coords.longitude;
+
+    var map = new google.maps.Map(document.getElementById('google_map'), {
+      center: {lat: lat, lng: lng},
+      scrollwheel: false,
+      zoom: 8
+    });
+  }
+
+  function geoError(err) {
+    console.error('geoError: ', err);
+  }
+}
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=<%= Rails.application.secrets.google_api_key %>&callback=init" async defer></script>

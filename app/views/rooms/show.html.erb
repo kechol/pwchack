@@ -1,0 +1,12 @@
+<h1>Chat room</h1>
+
+<div id="messages">
+  <%- @messages.each do |message| %>
+    <div class="message"><%= message.content %></div>
+  <% end %>
+</div>
+
+<form>
+  <label>Say something:</label><br>
+  <input type="text" data-behavior="message_input">
+</form>

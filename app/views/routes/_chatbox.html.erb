@@ -1,0 +1,75 @@
+<script>
+$(function() {
+  function parseURL() {
+    var arg = new Object;
+    var pair = location.search.substring(1).split('&');
+    for(var i = 0; pair[i]; i++) {
+      var kv = pair[i].split('=');
+      arg[kv[0]] = decodeURI(kv[1]);
+    }
+    return arg;
+  }
+
+  var chatbox = new Vue({
+    el: "#chatbox",
+    data: {
+      room_uuid: '',
+      new_message_text: '',
+      messages: []
+    },
+    methods: {
+      post_text: function() {
+        room.text(this.new_message_text);
+        this.new_message_text = '';
+      },
+      post_image: function() {
+        // room.image(this.new_message);
+      },
+      received: function(data) {
+        this.messages.push(data.message);
+        this.scrolldown();
+      },
+      onload: function() {
+        params = parseURL();
+        _this = this;
+        this.room_uuid = this.$el.attributes['data-uuid'].value;
+        $.getJSON("/messages.json?uuid=" + this.room_uuid, function(data) {
+          _this.messages = data.messages;
+          messages = $('#messages');
+          console.log('init messages', data.messages);
+          _this.scrolldown();
+
+          if(data.messages.length == 0) {
+            console.log('Post initial message.', room);
+            room.text('Hi, I\'m Homie. Let me navigate you! Your destination is "' + params.dest + '", right?', true);
+          }
+        });
+      },
+      scrolldown: function() {
+        setTimeout(function() {
+          messages = $('#messages');
+          messages.scrollTop(messages[0].scrollHeight);
+        }, 100);
+      }
+    }
+  });
+
+
+  var cable = ActionCable.createConsumer();
+  var room = cable.subscriptions.create({
+      channel: 'RoomChannel',
+      room: chatbox.$el.attributes['data-uuid'].value
+    }, {
+    received: function(data) {
+      console.log('cable.received', data);
+      chatbox.received(data);
+    },
+    text: function(message, bot_flg) {
+      console.log('cable.post', message);
+      this.perform('post', { content: message, bot_flg: bot_flg, type: 'text' });
+    }
+  });
+
+  chatbox.onload();
+});
+</script>

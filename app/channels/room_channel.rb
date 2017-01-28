@@ -1,6 +1,6 @@
 class RoomChannel < ApplicationCable::Channel
   def subscribed
-    stream_from "room_channel"
+    stream_from params[:room]
   end
 
   def unsubscribed
@@ -8,7 +8,8 @@ class RoomChannel < ApplicationCable::Channel
   end
 
   def post(data)
-    Message.create! content: data['message']
-    ActionCable.server.broadcast 'room_channel', message: data['message']
+    @room = Room.find_by(uuid: params[:room])
+    Message.create! room: @room, content: data['content'], bot_flg: !!data['bot_flg'], type: data['type']
+    ActionCable.server.broadcast params[:room], message: data
   end
 end

@@ -1,0 +1,7 @@
+<div class="searchbox">
+  <p class="searchbox-text">Please enter the destination.</p>
+  <%= form_tag(routes_create_path, method: :post, class: 'searchbox-form') do |f| %>
+    <input type="text" name="destination" id="destination" class="searchbox-form-input">
+    <button type="submit" class="searchbox-form-submit">Search</button>
+  <% end %>
+</div>

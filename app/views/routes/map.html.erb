@@ -1,0 +1,55 @@
+<div class="navigation">
+  <div class="map">
+    <div id="google_map"></div>
+  </div>
+  <div class="line"></div>
+</div>
+<div class="chatbox open" id="chatbox" data-uuid="<%= @room.uuid %>">
+  <div class="chatbox-handle">
+    <i class="fa fa-chevron-up" aria-hidden="true"></i>
+  </div>
+  <div class="chatbox-stream" id="messages">
+    <div class="message" v-for="message in messages" v-bind:class="{ bot: message.bot_flg }">
+      <div class="message-body" v-bind:class="[message.type]">{{message.content}}</div>
+    </div>
+  </div>
+  <div class="chatbox-input">
+    <form action="" id="new_message" v-on:submit.prevent="post_text">
+      <label for="new_message_image" class="chatbox-input-file">
+        <i class="fa fa-camera"></i>
+        <input type="file" name="new_message_image" id="new_message_image" v-on:change="post_image">
+      </label>
+      <div class="chatbox-input-text">
+        <input type="text" name="new_message_text" id="new_message_text" v-model="new_message_text">
+        <button type="button" v-on:click.prevent="post_text">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<%= render partial: 'chatbox' %>
+<script>
+$(document).on('click', '.chatbox-handle', function(e) {
+  $('.chatbox').toggleClass('open');
+});
+
+function init() {
+  navigator.geolocation.getCurrentPosition(geoSuccess, geoError);
+
+  function geoSuccess(pos) {
+    var lat = pos.coords.latitude;
+    var lng = pos.coords.longitude;
+
+    var map = new google.maps.Map(document.getElementById('google_map'), {
+      center: {lat: lat, lng: lng},
+      scrollwheel: false,
+      zoom: 8
+    });
+  }
+
+  function geoError(err) {
+    console.error('geoError: ', err);
+  }
+}
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=<%= Rails.application.secrets.google_api_key %>&callback=init" async defer></script>

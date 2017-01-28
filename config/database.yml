@@ -1,0 +1,24 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+development:
+  <<: *default
+  database: pwchack_development
+  #username: pwchack
+  #password:
+  #host: localhost
+  #port: 5432
+  #schema_search_path: myapp,sharedapp,public
+  #min_messages: notice
+
+test:
+  <<: *default
+  database: pwchack_test
+
+production:
+  <<: *default
+  database: pwchack_production
+  username: pwchack
+  password: <%= ENV['PWCHACK_DATABASE_PASSWORD'] %>

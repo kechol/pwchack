@@ -66,7 +66,6 @@ a {
 
 .app {
   height: 100%;
-  padding: 44px 0 0;
   overflow: hidden;
 
   .header {
@@ -86,11 +85,11 @@ a {
 
   input[type='text'] {
     padding: 5px;
-    border: solid 1px #ccc;
-    border-radius: 4px;
     min-width: 200px;
     height: 30px;
     font-size: 16px;
+    border: 0 none;
+    background: transparent;
   }
 
   button {

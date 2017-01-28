@@ -17,11 +17,11 @@ ActiveRecord::Schema.define(version: 20170128134503) do
 
   create_table "messages", force: :cascade do |t|
     t.text     "content"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
     t.integer  "room_id"
-    t.boolean  "bot_flg",    default: false, null: false
-    t.integer  "type",       default: 0,     null: false
+    t.boolean  "bot_flg",    default: false,  null: false
+    t.string   "intent",     default: "text", null: false
   end
 
   create_table "rooms", force: :cascade do |t|

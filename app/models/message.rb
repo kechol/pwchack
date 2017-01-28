@@ -1,11 +1,9 @@
 class Message < ApplicationRecord
-  self.inheritance_column = :_type_disabled
-
-  enum type: [:text, :image]
+  serialize :content, JSON
   belongs_to :room
 
-  validates :content, presence: true
   validates :room_id, presence: true
-  
+  validates :intent, presence: true
+
   after_create_commit { MessageBroadcastJob.perform_later self }
 end

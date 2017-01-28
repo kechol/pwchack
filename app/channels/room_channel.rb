@@ -9,7 +9,24 @@ class RoomChannel < ApplicationCable::Channel
 
   def post(data)
     @room = Room.find_by(uuid: params[:room])
-    Message.create! room: @room, content: data['content'], bot_flg: !!data['bot_flg'], type: data['type']
-    ActionCable.server.broadcast params[:room], message: data
+    msg = Message.create!({
+      room: @room,
+      content: data['content'],
+      bot_flg: !!data['bot_flg'],
+      intent: data['intent']
+    })
+    ActionCable.server.broadcast params[:room], message: msg.as_json
+
+    if !data['bot_flg'] && data['intent'] == 'text'
+      @luis = AzureLuisService.new
+      resp = @luis.answer(data['content']['text'])
+      msg = Message.create!({
+        room: @room,
+        bot_flg: true,
+        intent: resp['intents'][0]['intent'],
+        content: resp['entities'][0]
+      })
+      ActionCable.server.broadcast params[:room], message: msg.as_json
+    end
   end
 end

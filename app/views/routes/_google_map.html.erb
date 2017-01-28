@@ -1,0 +1,68 @@
+<script>
+$(function() {
+  var google_map = new Vue({
+    el: "#google_map",
+    data: {
+      lat: null,
+      lng: null,
+      map: null,
+      directions: {
+        display: null,
+        service: null
+      }
+    },
+    methods: {
+      onload: function() {
+        this.map = new google.maps.Map(this.$el, {
+          center: { lat: 35.5264967, lng: 139.6989488 },
+          scrollwheel: false,
+          zoomControl: true,
+          zoom: 16
+        });
+        this.directions.display = new google.maps.DirectionsRenderer();
+        this.directions.service = new google.maps.DirectionsService();
+        this.directions.display.setMap(this.map);
+        this.directions.display.setPanel(document.getElementById("google_route"));
+      },
+      update_location: function(pos) {
+        this.lat = pos.coords.latitude;
+        this.lng = pos.coords.longitude;
+        this.map.setCenter(new google.maps.LatLng(this.lat, this.lng));
+        console.log('locaion update: ', this.lat, this.lng);
+      },
+      get_route: function(message) {
+        var _this = this;
+        var origin = new google.maps.LatLng(this.lat, this.lng);
+        var destination = message.content.entity;
+
+        this.directions.service.route({
+          origin: origin,
+          destination: destination,
+          travelMode: google.maps.DirectionsTravelMode.TRANSIT,
+          unitSystem: google.maps.DirectionsUnitSystem.METRIC,
+          optimizeWaypoints: true,
+          avoidHighways: true,
+          avoidTolls: true,
+          transitOptions: {
+          modes: [
+              google.maps.TransitMode.RAIL]
+          }
+        }, function(result, status) {
+          console.log('get_route', origin, destination, result);
+          if(status === google.maps.DirectionsStatus.OK) {
+            directionsDisplay.setDirections(result);
+          }
+        });
+      }
+    }
+  });
+
+  google_map.eventHub.$on('builtin.intent.places.get_route', google_map.get_route);
+
+  setInterval(function() {
+    navigator.geolocation.getCurrentPosition(google_map.update_location, console.error);
+  }, 10000);
+
+  google_map.onload();
+});
+</script>

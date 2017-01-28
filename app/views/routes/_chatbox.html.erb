@@ -1,15 +1,5 @@
 <script>
 $(function() {
-  function parseURL() {
-    var arg = new Object;
-    var pair = location.search.substring(1).split('&');
-    for(var i = 0; pair[i]; i++) {
-      var kv = pair[i].split('=');
-      arg[kv[0]] = decodeURI(kv[1]);
-    }
-    return arg;
-  }
-
   var chatbox = new Vue({
     el: "#chatbox",
     data: {
@@ -27,21 +17,22 @@ $(function() {
       },
       received: function(data) {
         this.messages.push(data.message);
+        this.call_intent(data.message);
         this.scrolldown();
       },
       onload: function() {
-        params = parseURL();
-        _this = this;
+        var _this = this;
         this.room_uuid = this.$el.attributes['data-uuid'].value;
+
         $.getJSON("/messages.json?uuid=" + this.room_uuid, function(data) {
           _this.messages = data.messages;
           messages = $('#messages');
-          console.log('init messages', data.messages);
+          console.log('init messages', JSON.stringify(data.messages));
           _this.scrolldown();
 
           if(data.messages.length == 0) {
-            console.log('Post initial message.', room);
-            room.text('Hi, I\'m Homie. Let me navigate you! Your destination is "' + params.dest + '", right?', true);
+            console.log('init first message', room);
+            room.text('Hi, I\'m Homie. Let me navigate you!', true);
           }
         });
       },
@@ -50,10 +41,16 @@ $(function() {
           messages = $('#messages');
           messages.scrollTop(messages[0].scrollHeight);
         }, 100);
+      },
+      toggle_chatbox: function() {
+        $(this.$el).toggleClass('open');
+      },
+      call_intent: function(message) {
+        console.log('call_intent', message.intent);
+        this.eventHub.$emit(message.intent, message);
       }
     }
   });
-
 
   var cable = ActionCable.createConsumer();
   var room = cable.subscriptions.create({
@@ -66,7 +63,7 @@ $(function() {
     },
     text: function(message, bot_flg) {
       console.log('cable.post', message);
-      this.perform('post', { content: message, bot_flg: bot_flg, type: 'text' });
+      this.perform('post', { content: { text: message } , bot_flg: bot_flg, intent: 'text' });
     }
   });
 

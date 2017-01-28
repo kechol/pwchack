@@ -15,3 +15,10 @@
 //= require turbolinks
 //= require vue
 //= require_tree .
+
+const eventHub = new Vue();
+Vue.mixin({
+  data: function() {
+    return { eventHub: eventHub }
+  }
+});

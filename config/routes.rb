@@ -5,4 +5,5 @@ Rails.application.routes.draw do
   get  'routes/map/:uuid', to: 'routes#map', as: 'routes_map'
   post 'routes/create',    to: 'routes#create'
   get  'messages', to: 'messages#index', format: :json
+  post 'messages/upload', to: 'messages#upload', format: :json
 end

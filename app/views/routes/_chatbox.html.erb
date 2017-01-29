@@ -8,12 +8,27 @@ $(function() {
       messages: []
     },
     methods: {
-      post_text: function() {
+      post_text: function(evt) {
         room.text(this.new_message_text);
         this.new_message_text = '';
       },
-      post_image: function() {
+      post_image: function(evt) {
+        console.log(evt.target.files[0]);
         // room.image(this.new_message);
+        var fd = new FormData();
+        fd.append('uuid', this.room_uuid);
+        fd.append('image', evt.target.files[0]);
+        $.ajax({
+          url: '/messages/upload',
+          method: 'post',
+          data: fd,
+          dataType: 'json',
+          contentType: false,
+          processData: false
+        }).success(function(data) {
+          console.log('file upload', data);
+          room.image(data.selfie.image[0].url);
+        });
       },
       received: function(data) {
         this.messages.push(data.message);
@@ -64,6 +79,10 @@ $(function() {
     text: function(message, bot_flg) {
       console.log('cable.post', message);
       this.perform('post', { content: { text: message } , bot_flg: bot_flg, intent: 'text' });
+    },
+    image: function(message, bot_flg) {
+      console.log('cable.post', message);
+      this.perform('post', { content: { image_url: message } , bot_flg: bot_flg, intent: 'image' });
     }
   });
 

@@ -158,7 +158,7 @@
       z-index: 20;
       bottom: 0;
       left: 0;
-      padding: 0 40px 0 5px;
+      padding: 0 50px 0 5px;
       width: 100%;
       height: 44px;
       border-top: solid 1px rgba(255,255,255,0.1);
@@ -169,16 +169,16 @@
         display: block;
         position: absolute;
         overflow: hidden;
-        top: 5px;
-        right: 7px;
-        padding: 30px 0 0;
-        width: 30px;
+        top: 0;
+        right: 0;
+        padding: 44px 0 0;
+        width: 50px;
         height: 0;
 
         .fa {
           position: absolute;
-          top: 0;
-          left: 0;
+          top: 5px;
+          left: 7px;
           width: 30px;
           line-height: 30px;
           color: #444;
@@ -259,7 +259,6 @@
     position: relative;
     z-index: 0;
     display: inline-block;
-    padding: 16px;
     border-radius: 6px;
     min-width: 80%;
     color: #000;
@@ -267,5 +266,18 @@
     font-size: 16px;
     text-align: left;
     box-shadow: rgba(0,0,0,0.2) 0px 2px 1px 0px;
+
+    &-text {
+      padding: 16px;
+    }
+
+    &-image {
+      border-radius: 6px;
+      overflow: hidden;
+
+      img {
+        vertical-align: bottom;
+      }
+    }
   }
 }

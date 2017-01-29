@@ -14,6 +14,11 @@
       <div class="message-body" v-if="message.intent === 'text'">
         <div class="message-body-text">{{message.content.text}}</div>
       </div>
+      <div class="message-body" v-if="message.intent === 'image'">
+        <div class="message-body-image">
+          <img v-bind:src="message.content.image_url" v-bind:alt="message.content.image_url">
+        </div>
+      </div>
       <div class="message-body" v-if="message.intent === 'builtin.intent.none'">
         <div class="message-body-text">Pardon me?</div>
       </div>
@@ -23,16 +28,16 @@
     </div>
   </div>
   <div class="chatbox-input">
-    <form action="" id="new_message_image" v-on:submit.prevent="post_image">
-      <label for="new_message_image" class="chatbox-input-file">
-        <i class="fa fa-camera"></i>
-        <input type="file" name="new_message_image" id="new_message_image" v-on:change="post_image">
-      </label>
-    </form>
-    <form action="" id="new_message_text" v-on:submit.prevent="post_text">
+    <form action="" id="new_message_form_text" v-on:submit.prevent="post_text">
       <div class="chatbox-input-text">
         <input type="text" name="new_message_text" id="new_message_text" v-model="new_message_text" placeholder="Start chatting...">
       </div>
+    </form>
+    <form action="" id="new_message_form_image" enctype="multipart/form-data" v-on:submit.prevent="post_image">
+      <label for="new_message_image" class="chatbox-input-file">
+        <i class="fa fa-camera"></i>
+        <input type="file" accept="image/*" capture="camera" name="new_message_image" id="new_message_image" v-on:change="post_image">
+      </label>
     </form>
   </div>
 </div>

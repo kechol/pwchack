@@ -43,6 +43,7 @@
   </div>
 </div>
 
+<%= render partial: 'debug' %>
 <%= render partial: 'chatbox' %>
 <%= render partial: 'google_map' %>
 <script src="https://maps.googleapis.com/maps/api/js?key=<%= Rails.application.secrets.google_api_key %>&language=en&region=JP" charset="utf-8"></script>

@@ -147,6 +147,8 @@ GEM
     rails_12factor (0.0.3)
       rails_serve_static_assets
       rails_stdout_logging
+    rails_autolink (1.1.6)
+      rails (> 3.1)
     rails_best_practices (1.17.0)
       activesupport
       code_analyzer (>= 0.4.3)
@@ -238,6 +240,7 @@ DEPENDENCIES
   puma (~> 3.0)
   rails (~> 5.0.1)
   rails_12factor
+  rails_autolink
   rails_best_practices
   redis (~> 3.0)
   sass-rails (~> 5.0)

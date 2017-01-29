@@ -1,0 +1,175 @@
+<div id="debug">
+  <div class="scenario" v-for="sn in scenarios" v-on:click.prevent="post(sn)">
+    <span class="scenario-content">{{sn}}</span>
+  </div>
+</div>
+<script>
+$(function() {
+  var debug = new Vue({
+    el: '#debug',
+    data: {
+      scenarios: [
+        {
+          intent: 'text',
+          bot_flg: true,
+          content: {
+            text: "Let’s get to the station first!"
+          }
+        },
+        {
+          intent: 'text',
+          bot_flg: true,
+          content: {
+            text: "Tell me if you need to buy something before you take the train!"
+          }
+        },
+        {
+          intent: 'map',
+          bot_flg: true,
+          content: {
+            lat: 35.532216,
+            lng: 139.700341
+          }
+        },
+        {
+          intent: 'route',
+          bot_flg: true,
+          content: {
+            route_id: 1
+          },
+        },
+        {
+          intent: 'text',
+          bot_flg: true,
+          content: {
+            text: "Make sure you get on Limited Express!"
+          }
+        },
+        {
+          intent: 'text',
+          bot_flg: true,
+          content: {
+            text: "It will look like this."
+          }
+        },
+        {
+          intent: 'image',
+          bot_flg: true,
+          content: {
+            image_url: "https://placehold.it/200x200"
+          }
+        },
+        {
+          intent: 'map',
+          bot_flg: true,
+          content: {
+            lat: 35.628463,
+            lng: 139.738770
+          }
+        },
+        {
+          intent: 'text',
+          bot_flg: true,
+          content: {
+            text: "Follow this sign!"
+          }
+        },
+        {
+          intent: 'route',
+          bot_flg: true,
+          content: {
+            route_id: 2
+          },
+        },
+        {
+          intent: 'map',
+          bot_flg: true,
+          content: {
+            lat: 35.683836,
+            lng: 139.713027
+          }
+        },
+        {
+          intent: 'text',
+          bot_flg: true,
+          content: {
+            text: "You made it!"
+          }
+        },
+        {
+          intent: 'goal',
+          bot_flg: true,
+          content: {
+          }
+        },
+        {
+          intent: 'text',
+          bot_flg: true,
+          content: {
+            text: "Why don’t you take a selfie? Try making an angry face. >:("
+          }
+        },
+        {
+          intent: 'text',
+          bot_flg: true,
+          content: {
+            text: "I can take you to 足湯カフェ(foot bath cafe)!"
+          }
+        },
+        {
+          intent: 'image',
+          bot_flg: true,
+          content: {
+            image_url: "https://placehold.it/200x200"
+          }
+        },
+        {
+          intent: 'text',
+          bot_flg: true,
+          content: {
+            text: "It’s where you can enjoy coffee with your feet resting at the hot foot spa."
+          }
+        },
+        {
+          intent: 'route',
+          bot_flg: true,
+          content: {
+            lat: 36,
+            lng: 143
+          }
+        },
+        {
+          intent: 'answer',
+          bot_flg: true,
+          content: {
+            choises: [
+              "Take me there!",
+              "Nah, any other options?"
+            ]
+          }
+        }
+      ]
+    },
+    methods: {
+      post: function(scenario) {
+        console.log('debug.emit', scenario);
+        room.post(scenario);
+      }
+    }
+  });
+
+  var cable = ActionCable.createConsumer();
+  var room = cable.subscriptions.create({
+      channel: 'RoomChannel',
+      room: document.getElementById('chatbox').attributes['data-uuid'].value
+    }, {
+    post: function(content) {
+      console.log('cable.post', content);
+      this.perform('post', content);
+    },
+  });
+
+  params = getJsonFromUrl();
+  if(params.bot) { $(debug.$el).show(); }
+});
+</script>

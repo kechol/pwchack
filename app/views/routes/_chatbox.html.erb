@@ -55,9 +55,9 @@ $(function() {
         });
         room.text(replies[max_key], true);
       },
-      received: function(data) {
-        this.messages.push(data.message);
-        this.call_intent(data.message);
+      received: function(message) {
+        this.messages.push(message);
+        this.call_intent(message);
         this.scrolldown();
       },
       onload: function() {
@@ -70,10 +70,10 @@ $(function() {
           console.log('init messages', JSON.stringify(data.messages));
           _this.scrolldown();
 
-          if(data.messages.length == 0) {
-            console.log('init first message', room);
-            room.text('Hi, I\'m Homie. Let me navigate you!', true);
-          }
+          // if(data.messages.length == 0) {
+            // console.log('init first message', room);
+            // room.text('Hi, I\'m Homie. Let me navigate you!', true);
+          // }
         });
       },
       scrolldown: function() {
@@ -102,7 +102,7 @@ $(function() {
     }, {
     received: function(data) {
       console.log('cable.received', data);
-      chatbox.received(data);
+      chatbox.received(data.message);
     },
     text: function(message, bot_flg) {
       console.log('cable.post', message);

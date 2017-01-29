@@ -22,6 +22,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'redis', '~> 3.0'
 gem 'faraday'
 gem 'carrierwave', '~> 1.0'
+gem 'rails_autolink'
 # gem 'bcrypt', '~> 3.1.7'
 
 # Use Capistrano for deployment

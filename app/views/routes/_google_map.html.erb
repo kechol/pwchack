@@ -15,8 +15,8 @@ $(function() {
     },
     methods: {
       onload: function() {
-        this.lat = 35.5264967; //川崎駅
-        this.lng = 139.6989488;
+        this.lat = 35.526969;
+        this.lng = 139.698608;
         this.map = new google.maps.Map(this.$el, {
           center: new google.maps.LatLng(this.lat, this.lng),
           scrollwheel: false,
@@ -30,6 +30,9 @@ $(function() {
 
         params = getJsonFromUrl();
         this.get_route({content: {entity: params['dest']}})
+      },
+      set_center: function(message) {
+        this.map.setCenter(new google.maps.LatLng(this.lat, this.lng));
       },
       update_location: function(pos) {
         this.lat = pos.coords.latitude;
@@ -64,15 +67,18 @@ $(function() {
     }
   });
 
+  google_map.eventHub.$on('map', google_map.set_center);
+  google_map.eventHub.$on('route', google_map.get_route);
   google_map.eventHub.$on('builtin.intent.places.get_route', google_map.get_route);
+
   $('.map-route-btn').on('click', function() {
      google_map.route_view.toggleClass('open');
    });
 
+   google_map.onload();
+
   // setInterval(function() {
   //   navigator.geolocation.getCurrentPosition(google_map.update_location, console.error);
   // }, 10000);
-
-  google_map.onload();
 });
 </script>

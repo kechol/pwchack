@@ -12,4 +12,9 @@ class RoutesController < ApplicationController
     @room = Room.create(uuid: SecureRandom.uuid)
     redirect_to routes_map_path(uuid: @room.uuid, dest: params[:destination])
   end
+
+  def debug
+    @room = Room.last
+    redirect_to routes_map_path(uuid: @room.uuid, bot: true)
+  end
 end

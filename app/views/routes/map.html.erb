@@ -1,8 +1,16 @@
+<div class="header">
+  <!-- <div class="header-title">Homie</div> -->
+  <a href="<%= root_path %>"><span class="lnr lnr-arrow-left-circle header-btn-left"></span></a>
+  <span class="lnr lnr-map header-btn-right"></span>
+</div>
+
 <div class="navigation">
   <div class="map">
     <div id="google_map"></div>
-    <div id="google_route"></div>
-    <i class="map-route-btn fa fa-compass"></i>
+    <div id="google_route">
+      <div class="route route-1"><%= image_tag "https://cloud.githubusercontent.com/assets/625489/22402375/3704ac02-e638-11e6-88ef-a85a934883d6.png" %></div>
+      <div class="route route-2"><%= image_tag "https://cloud.githubusercontent.com/assets/625489/22402376/370567d2-e638-11e6-8e36-2878b962501a.png" %></div>
+    </div>
   </div>
 </div>
 <div class="chatbox open" id="chatbox" data-uuid="<%= @room.uuid %>">
@@ -36,7 +44,7 @@
     </form>
     <form action="" id="new_message_form_image" enctype="multipart/form-data" v-on:submit.prevent="post_image">
       <label for="new_message_image" class="chatbox-input-file">
-        <i class="fa fa-camera"></i>
+        <span class="lnr lnr-camera"></span>
         <input type="file" accept="image/*" capture="camera" name="new_message_image" id="new_message_image" v-on:change="post_image">
       </label>
     </form>

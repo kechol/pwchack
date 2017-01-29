@@ -56,7 +56,7 @@ $(function() {
           intent: 'image',
           bot_flg: true,
           content: {
-            image_url: "https://placehold.it/200x200"
+            image_url: "https://cloud.githubusercontent.com/assets/625489/22402374/37048d12-e638-11e6-9c90-456543b6b941.png"
           }
         },
         {
@@ -72,6 +72,13 @@ $(function() {
           bot_flg: true,
           content: {
             text: "Follow this sign!"
+          }
+        },
+        {
+          intent: 'image',
+          bot_flg: true,
+          content: {
+            image_url: "https://cloud.githubusercontent.com/assets/625489/22402377/373fc594-e638-11e6-943e-6276fc6357a5.png"
           }
         },
         {
@@ -97,12 +104,6 @@ $(function() {
           }
         },
         {
-          intent: 'goal',
-          bot_flg: true,
-          content: {
-          }
-        },
-        {
           intent: 'text',
           bot_flg: true,
           content: {
@@ -120,7 +121,7 @@ $(function() {
           intent: 'image',
           bot_flg: true,
           content: {
-            image_url: "https://placehold.it/200x200"
+            image_url: "https://cloud.githubusercontent.com/assets/625489/22402373/3703172a-e638-11e6-99b0-6d8229903bd4.png"
           }
         },
         {
@@ -131,11 +132,13 @@ $(function() {
           }
         },
         {
-          intent: 'route',
+          intent: 'get_route',
           bot_flg: true,
           content: {
-            lat: 36,
-            lng: 143
+            entity: {
+              lat: 36,
+              lng: 143
+            }
           }
         },
         {

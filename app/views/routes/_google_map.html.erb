@@ -40,6 +40,12 @@ $(function() {
         this.map.setCenter(new google.maps.LatLng(this.lat, this.lng));
         console.log('locaion update: ', this.lat, this.lng);
       },
+      show_route: function(message) {
+        var _this = this;
+        this.route_view.find('.route').hide();
+        this.route_view.find('.route-' + message.content.route_id).show();
+        this.route_view.addClass('open');
+      },
       get_route: function(message) {
         var _this = this;
         var origin = new google.maps.LatLng(this.lat, this.lng);
@@ -68,14 +74,15 @@ $(function() {
   });
 
   google_map.eventHub.$on('map', google_map.set_center);
-  google_map.eventHub.$on('route', google_map.get_route);
+  google_map.eventHub.$on('route', google_map.show_route);
+  google_map.eventHub.$on('get_route', google_map.get_route);
   google_map.eventHub.$on('builtin.intent.places.get_route', google_map.get_route);
 
-  $('.map-route-btn').on('click', function() {
-     google_map.route_view.toggleClass('open');
-   });
+  $('.header-btn-right').on('click', function(evt) {
+    google_map.route_view.toggleClass('open');
+  });
 
-   google_map.onload();
+  google_map.onload();
 
   // setInterval(function() {
   //   navigator.geolocation.getCurrentPosition(google_map.update_location, console.error);

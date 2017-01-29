@@ -89,7 +89,44 @@
 
   .map {
     height: 100%;
+    padding: 0 0 300px;
     position: relative;
+      overflow: hidden;
+
+    #google_map, #google_route {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      background: #fff;
+
+      &.open {
+        z-index: 10;
+      }
+    }
+
+    #google_route {
+      z-index: 0;
+      overflow-x: hidden;
+      overflow-y: scroll;
+    }
+
+    .map-route-btn {
+      position: absolute;
+      z-index: 30;
+      right: 15px;
+      bottom: 315px;
+      border-radius: 999px;
+      width: 40px;
+      height: 40px;
+      line-height: 40px;
+      font-size: 20px;
+      background: #fff;
+      text-align: center;
+      box-shadow: rgba(0,0,0,0.2) 0 0 1px 3px;
+    }
   }
 
   .chatbox {
@@ -185,6 +222,9 @@
         }
 
         input[type='file'] {
+          position: absolute;
+          bottom: 100px;
+          left: 0;
           height: 0;
         }
       }

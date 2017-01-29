@@ -9,12 +9,16 @@ $(function() {
       directions: {
         display: null,
         service: null
-      }
+      },
+      map_view: $('#google_map'),
+      route_view: $('#google_route'),
     },
     methods: {
       onload: function() {
+        this.lat = 35.5264967; //川崎駅
+        this.lng = 139.6989488;
         this.map = new google.maps.Map(this.$el, {
-          center: { lat: 35.5264967, lng: 139.6989488 },
+          center: new google.maps.LatLng(this.lat, this.lng),
           scrollwheel: false,
           zoomControl: true,
           zoom: 16
@@ -22,7 +26,10 @@ $(function() {
         this.directions.display = new google.maps.DirectionsRenderer();
         this.directions.service = new google.maps.DirectionsService();
         this.directions.display.setMap(this.map);
-        this.directions.display.setPanel(document.getElementById("google_route"));
+        this.directions.display.setPanel(this.route_view[0]);
+
+        params = getJsonFromUrl();
+        this.get_route({content: {entity: params['dest']}})
       },
       update_location: function(pos) {
         this.lat = pos.coords.latitude;
@@ -38,19 +45,19 @@ $(function() {
         this.directions.service.route({
           origin: origin,
           destination: destination,
-          travelMode: google.maps.DirectionsTravelMode.TRANSIT,
+          travelMode: google.maps.DirectionsTravelMode.DRIVING,
+          // travelMode: google.maps.DirectionsTravelMode.TRANSIT,
           unitSystem: google.maps.DirectionsUnitSystem.METRIC,
           optimizeWaypoints: true,
-          avoidHighways: true,
-          avoidTolls: true,
-          transitOptions: {
-          modes: [
-              google.maps.TransitMode.RAIL]
-          }
+          // avoidHighways: true,
+          // avoidTolls: true,
+          // transitOptions: {
+          // modes: [google.maps.TransitMode.RAIL]
+          // }
         }, function(result, status) {
           console.log('get_route', origin, destination, result);
           if(status === google.maps.DirectionsStatus.OK) {
-            directionsDisplay.setDirections(result);
+            _this.directions.display.setDirections(result);
           }
         });
       }
@@ -58,10 +65,13 @@ $(function() {
   });
 
   google_map.eventHub.$on('builtin.intent.places.get_route', google_map.get_route);
+  $('.map-route-btn').on('click', function() {
+     google_map.route_view.toggleClass('open');
+   });
 
-  setInterval(function() {
-    navigator.geolocation.getCurrentPosition(google_map.update_location, console.error);
-  }, 10000);
+  // setInterval(function() {
+  //   navigator.geolocation.getCurrentPosition(google_map.update_location, console.error);
+  // }, 10000);
 
   google_map.onload();
 });

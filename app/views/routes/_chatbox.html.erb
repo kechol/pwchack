@@ -9,7 +9,8 @@ $(function() {
     },
     methods: {
       post_text: function(evt) {
-        room.text(this.new_message_text);
+        params = getJsonFromUrl();
+        room.text(this.new_message_text, !!params['bot']);
         this.new_message_text = '';
       },
       post_image: function(evt) {
@@ -27,8 +28,34 @@ $(function() {
           processData: false
         }).success(function(data) {
           console.log('file upload', data);
-          room.image(data.selfie.image[0].url);
+          room.image(data.selfie.image[0].url, !!params['bot']);
         });
+      },
+      reply_emotion: function(emotion) {
+        if(!emotion.content) {
+          emotion.content.text = 'Show me the face!';
+          return;
+        }
+
+        var replies = {
+          anger: 'Why you got upset?!?',
+          contempt: 'Be gentle.',
+          disgust: 'No, no, no. Please.',
+          fear: 'Don\t warry.',
+          happiness: 'Haha! You look furious.',
+          neutral: 'Hey! Make smile!',
+          sadness: 'Don\'t cry. I\'m here.',
+          surprise: 'What happend?!'
+        };
+
+        var keys = emotion.content.scores.keys();
+        var max_key = '', max_val = 0;
+        for (var i=0;i<keys.length;i++) {
+          if(max_val < emotion.content.scores[keys[i]]) {
+            max_key = keys[i];
+          }
+        }
+        emotion.content.text = replies[max_key];
       },
       received: function(data) {
         this.messages.push(data.message);
@@ -66,6 +93,9 @@ $(function() {
       }
     }
   });
+
+  chatbox.eventHub.$on('emotion', chatbox.reply_emotion);
+
 
   var cable = ActionCable.createConsumer();
   var room = cable.subscriptions.create({

@@ -2,6 +2,7 @@
   <div class="map">
     <div id="google_map"></div>
     <div id="google_route"></div>
+    <i class="map-route-btn fa fa-compass"></i>
   </div>
 </div>
 <div class="chatbox open" id="chatbox" data-uuid="<%= @room.uuid %>">
@@ -25,6 +26,9 @@
       <div class="message-body" v-if="message.intent === 'builtin.intent.places.get_route'">
         <div class="message-body-text">Okay, here's the route for {{message.content.entity}}.</div>
       </div>
+      <div class="message-body" v-if="message.intent === 'emotion' && !!message.content">
+        <div class="message-body-text">{{message.content.text}}</div>
+      </div>
     </div>
   </div>
   <div class="chatbox-input">
@@ -44,4 +48,4 @@
 
 <%= render partial: 'chatbox' %>
 <%= render partial: 'google_map' %>
-<script src="https://maps.googleapis.com/maps/api/js?key=<%= Rails.application.secrets.google_api_key %>"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=<%= Rails.application.secrets.google_api_key %>&language=en&region=JP" charset="utf-8"></script>

@@ -11,7 +11,7 @@
   </div> -->
   <div class="chatbox-stream" id="messages">
     <div class="message" v-for="message in messages" v-bind:class="{ bot: message.bot_flg }">
-      <div class="message-icon" v-if="message.bot_flg"><%= image_tag("woman.png") %></div>
+      <div class="message-icon" v-if="message.bot_flg && chat_intents.indexOf(message.intent) > -1"><%= image_tag("woman.png") %></div>
       <div class="message-body" v-if="message.intent === 'text'">
         <div class="message-body-text">{{message.content.text}}</div>
       </div>
@@ -20,14 +20,11 @@
           <img v-bind:src="message.content.image_url" v-bind:alt="message.content.image_url">
         </div>
       </div>
-      <div class="message-body" v-if="message.intent === 'builtin.intent.none'">
+      <!-- <div class="message-body" v-if="message.intent === 'builtin.intent.none'">
         <div class="message-body-text">Pardon me?</div>
-      </div>
+      </div> -->
       <div class="message-body" v-if="message.intent === 'builtin.intent.places.get_route'">
         <div class="message-body-text">Okay, here's the route for {{message.content.entity}}.</div>
-      </div>
-      <div class="message-body" v-if="message.intent === 'emotion' && !!message.content">
-        <div class="message-body-text">{{message.content.text}}</div>
       </div>
     </div>
   </div>

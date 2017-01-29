@@ -5,7 +5,8 @@ $(function() {
     data: {
       room_uuid: '',
       new_message_text: '',
-      messages: []
+      messages: [],
+      chat_intents: ['text', 'image', 'builtin.intent.places.get_route']
     },
     methods: {
       post_text: function(evt) {
@@ -33,7 +34,7 @@ $(function() {
       },
       reply_emotion: function(emotion) {
         if(!emotion.content) {
-          emotion.content.text = 'Show me the face!';
+          room.text('Show me the face!', true);
           return;
         }
 
@@ -48,14 +49,11 @@ $(function() {
           surprise: 'What happend?!'
         };
 
-        var keys = emotion.content.scores.keys();
         var max_key = '', max_val = 0;
-        for (var i=0;i<keys.length;i++) {
-          if(max_val < emotion.content.scores[keys[i]]) {
-            max_key = keys[i];
-          }
-        }
-        emotion.content.text = replies[max_key];
+        $.map(emotion.content.scores, function(val, key) {
+          if(max_val < val) max_key = key;
+        });
+        room.text(replies[max_key], true);
       },
       received: function(data) {
         this.messages.push(data.message);

@@ -7,10 +7,12 @@ class AzureEmotionService
   end
 
   def detect_by_url(url)
-    resp = @conn.get @@api_path do |req|
-      req.params['url'] = url
-      req.headers['Ocp-Apim-Subscription-Key'] = Rails.application.secrets.azure
+    resp = @conn.post @@api_path do |req|
+      req.body = { url: url }.to_json
+      req.headers['Content-Type'] = 'application/json'
+      req.headers['Ocp-Apim-Subscription-Key'] = Rails.application.secrets.azure_emotion_api_key
     end
+    puts resp.inspect
     JSON.parse(resp.body)
   end
 end

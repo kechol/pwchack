@@ -6,7 +6,7 @@ $(function() {
       room_uuid: '',
       new_message_text: '',
       messages: [],
-      chat_intents: ['text', 'image', 'builtin.intent.places.get_route']
+      chat_intents: ['text', 'image', 'builtin.intent.places.get_route', 'text_with_choices']
     },
     methods: {
       post_text: function(evt) {
@@ -38,22 +38,13 @@ $(function() {
           return;
         }
 
-        var replies = {
-          anger: 'Why you got upset?!?',
-          contempt: 'Be gentle.',
-          disgust: 'No, no, no. Please.',
-          fear: 'Don\t warry.',
-          happiness: 'Haha! You look furious.',
-          neutral: 'Hey! Make smile!',
-          sadness: 'Don\'t cry. I\'m here.',
-          surprise: 'What happend?!'
-        };
-
-        var max_key = '', max_val = 0;
-        $.map(emotion.content.scores, function(val, key) {
-          if(max_val < val) max_key = key;
-        });
-        room.text(replies[max_key], true);
+        if(emotion.content.scores.anger > 0.7) {
+          room.text("Haha! You look furious.", true);
+        } else {
+          room.text("You look like you just woke up.", true);
+        }
+      },
+      show_choices: function(message) {
       },
       received: function(message) {
         this.messages.push(message);
@@ -85,6 +76,9 @@ $(function() {
       toggle_chatbox: function() {
         $(this.$el).toggleClass('open');
       },
+      choose_answer: function(ch) {
+        console.log(ch);
+      },
       call_intent: function(message) {
         console.log('call_intent', message.intent);
         this.eventHub.$emit(message.intent, message);
@@ -93,6 +87,7 @@ $(function() {
   });
 
   chatbox.eventHub.$on('emotion', chatbox.reply_emotion);
+  chatbox.eventHub.$on('text_with_choices', chatbox.show_choices);
 
 
   var cable = ActionCable.createConsumer();

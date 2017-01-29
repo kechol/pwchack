@@ -125,10 +125,21 @@ $(function() {
           }
         },
         {
+          intent: 'text_with_choices',
+          bot_flg: true,
+          content: {
+            text: "It’s where you can enjoy coffee with your feet resting at the hot foot spa.",
+            choises: [
+              { text: "Take me there!" },
+              { text: "Nah, any other options?" },
+            ]
+          }
+        },
+        {
           intent: 'text',
           bot_flg: true,
           content: {
-            text: "It’s where you can enjoy coffee with your feet resting at the hot foot spa."
+            text: "Alright!"
           }
         },
         {
@@ -139,16 +150,6 @@ $(function() {
               lat: 36,
               lng: 143
             }
-          }
-        },
-        {
-          intent: 'answer',
-          bot_flg: true,
-          content: {
-            choises: [
-              "Take me there!",
-              "Nah, any other options?"
-            ]
           }
         }
       ]

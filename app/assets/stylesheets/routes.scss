@@ -323,5 +323,27 @@
         vertical-align: bottom;
       }
     }
+
+    &-choises {
+      margin-top: 20px 0 0;
+    }
+
+    &-choise {
+      position: relative;
+      margin: 0 auto 10px;
+      padding: 7px 10px;
+      z-index: 0;
+      border-radius: 6px;
+      width: 90%;
+      color: #000;
+      background: #fff;
+      font-size: 16px;
+      text-align: left;
+      box-shadow: rgba(0,0,0,0.2) 0px 2px 1px 0px;
+
+      &:active {
+        background: #ccc;
+      }
+    }
   }
 }

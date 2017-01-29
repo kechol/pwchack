@@ -34,6 +34,12 @@
       <div class="message-body" v-if="message.intent === 'builtin.intent.places.get_route'">
         <div class="message-body-text">Okay, here's the route for {{message.content.entity}}.</div>
       </div>
+      <div class="message-body" v-if="message.intent === 'text_with_choices'">
+        <div class="message-body-text">{{message.content.text}}</div>
+        <div class="message-body-choises">
+          <div class="message-body-choise" v-for="ch in message.content.choises" v-on:click.prevent="choose_answer(ch)">{{ch.text}}</div>
+        </div>
+      </div>
     </div>
   </div>
   <div class="chatbox-input">
